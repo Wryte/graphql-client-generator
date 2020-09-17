@@ -1,0 +1,25 @@
+// {{.TitleName}} {{.Description}}
+type {{.TitleName}} struct {{"{"}}{{range .PossibleTypes}}
+	// {{.TitleName}} A possible type of {{.Name}}
+	{{.TitleName}} *{{.TitleName}} `json:"{{.Name}}"`{{end}}
+	
+	// Valid indicates whether {{.TitleName}} unmarshalled properly
+	Valid bool
+}
+
+// UnmarshalJSON customer unmarshall function for {{.Name}} union type
+func ({{.FirstChar}} *{{.TitleName}}) UnmarshalJSON(data []byte) error {
+	var v interface{}
+
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	{{range .PossibleTypes}}
+	if av, ok := v.({{.TitleName}}); ok {
+		{{$.FirstChar}}.{{.TitleName}} = &av
+		{{$.FirstChar}}.Valid = true
+		return nil
+	}
+	{{end}}
+	return nil
+}

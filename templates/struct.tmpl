@@ -1,0 +1,5 @@
+// {{.TitleName}} {{.Description}}
+type {{.TitleName}} struct {{"{"}}{{range .Fields}}
+	// {{.TitleName}} {{.Description}}
+	{{.TitleName}} {{if .Type.IsList}}[]{{end}}{{if .Type.IsPointer}}*{{end}}{{.Type.Name}} `json:"{{.Name}}"`{{end}}
+}
