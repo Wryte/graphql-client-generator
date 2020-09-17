@@ -6,8 +6,8 @@ import (
 	"io/ioutil"
 	"os"
 
-	generate "github.com/wryte/graphql-client-generator/generate"
-	graphql "github.com/wryte/graphql-client-generator/graphql"
+	generate "github.com/Wryte/graphql-client-generator/generate"
+	graphql "github.com/Wryte/graphql-client-generator/graphql"
 )
 
 type schemaWrap struct {

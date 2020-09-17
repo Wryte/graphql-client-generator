@@ -11,6 +11,17 @@ type Schema struct {
 	Types []Type `json:"types"`
 }
 
+// Type retrieve a type by name
+func (s *Schema) Type(name string) *Type {
+	for _, t := range s.Types {
+		if t.Name == name {
+			return &t
+		}
+	}
+
+	return nil
+}
+
 // Type a type in the GraphQL schema
 type Type struct {
 	Kind          TypeKind       `json:"kind"`
@@ -18,6 +29,19 @@ type Type struct {
 	Description   string         `json:"description"`
 	Fields        []Field        `json:"fields"`
 	PossibleTypes []PossibleType `json:"possibleTypes"`
+}
+
+// NonNullFields retrieve non null fields
+func (t *Type) NonNullFields() []Field {
+	var fs []Field
+
+	for _, f := range t.Fields {
+		if f.Type.Kind == FieldTypeKindNonNull {
+			fs = append(fs, f)
+		}
+	}
+
+	return fs
 }
 
 // TypeKind a type's kind
