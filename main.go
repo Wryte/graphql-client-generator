@@ -11,7 +11,6 @@ import (
 )
 
 type schemaWrap struct {
-	Test string `json:"test"`
 	Data struct {
 		Schema graphql.Schema `json:"__schema"`
 	} `json:"data"`

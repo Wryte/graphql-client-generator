@@ -1,0 +1,8 @@
+
+// {{.TitleName}} {{.Description}}
+type {{.TitleName}} string
+
+const ({{range .Values}}
+  // {{$.TitleName}}{{.TitleName}} {{.Description}}
+  {{$.TitleName}}{{.TitleName}} {{$.TitleName}} = "{{.Value}}"{{end}}
+)

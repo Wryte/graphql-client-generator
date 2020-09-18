@@ -14,12 +14,14 @@ import (
 const (
 	structTemplateName = "struct"
 	unionTemplateName  = "union"
+	enumTemplateName   = "enum"
 )
 
 var (
 	templateStrings = []string{
 		structTemplateName,
 		unionTemplateName,
+		enumTemplateName,
 	}
 	tpls = map[string]*template.Template{}
 )
@@ -35,6 +37,13 @@ func Write(wr io.Writer, s graphql.Schema) error {
 		if strings.Index(t.Name, "__") != 0 && t.Name != s.MutationType.Name {
 			var err error
 			switch t.Kind {
+			case graphql.TypeKindScalar:
+			case graphql.TypeKindEnum:
+				etm := newEnumTemplateModel(t)
+				err = tpls[enumTemplateName].Execute(wr, etm)
+			case graphql.TypeKindInputObject:
+				t.Fields = t.InputFields
+				fallthrough
 			case graphql.TypeKindInterface:
 				fallthrough
 			case graphql.TypeKindObject:
@@ -42,7 +51,9 @@ func Write(wr io.Writer, s graphql.Schema) error {
 				err = tpls[structTemplateName].Execute(wr, stm)
 			case graphql.TypeKindUnion:
 				utm := newUnionTemplateModel(t)
-				tpls[unionTemplateName].Execute(os.Stdout, utm)
+				err = tpls[unionTemplateName].Execute(wr, utm)
+			default:
+				panic(fmt.Sprintf("Unkown type kind of %s\n%+v", t.Kind, t))
 			}
 
 			if err != nil {

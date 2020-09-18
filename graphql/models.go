@@ -29,6 +29,8 @@ type Type struct {
 	Description   string         `json:"description"`
 	Fields        []Field        `json:"fields"`
 	PossibleTypes []PossibleType `json:"possibleTypes"`
+	EnumValues    []EnumValue    `json:"enumValues"`
+	InputFields   []Field        `json:"inputFields"`
 }
 
 // NonNullFields retrieve non null fields
@@ -58,6 +60,8 @@ const (
 	TypeKindUnion TypeKind = "UNION"
 	// TypeKindInterface an interface type kind
 	TypeKindInterface TypeKind = "INTERFACE"
+	// TypeKindScalar an scalar type kind
+	TypeKindScalar TypeKind = "SCALAR"
 )
 
 // Field a field on a GraphQL type
@@ -69,11 +73,19 @@ type Field struct {
 	DeprecationReason string    `json:"deprecationReason"`
 }
 
-// PossibleType a possible type for a GrahpQL uniob
+// PossibleType a possible type for a GrahpQL union
 type PossibleType struct {
 	Kind   FieldTypeKind `json:"kind"`
 	Name   string        `json:"name"`
 	OfType *OfType       `json:"ofType"`
+}
+
+// EnumValue a value of an enum kind
+type EnumValue struct {
+	Name              string `json:"name"`
+	Description       string `json:"description"`
+	IsDeprecated      bool   `json:"isDeprecated"`
+	DeprecationReason string `json:"deprecationReason"`
 }
 
 // FieldType a GraphQL field's type
@@ -101,6 +113,8 @@ const (
 	FieldTypeKindScalar FieldTypeKind = "SCALAR"
 	// FieldTypeKindUnion a field type kind Union
 	FieldTypeKindUnion FieldTypeKind = "UNION"
+	// FieldTypeKindInputObject a field type kind Input Object
+	FieldTypeKindInputObject FieldTypeKind = "INPUT_OBJECT"
 )
 
 // OfType a nested GraphQl type

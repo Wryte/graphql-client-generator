@@ -38,8 +38,10 @@ func newStructTemplateModel(t graphql.Type) structTemplateModel {
 	for _, f := range t.Fields {
 		var ft structTemplateFieldType
 		switch f.Type.Kind {
+		case graphql.FieldTypeKindInputObject:
+			ft.Name = strings.Title(f.Type.Name)
 		case graphql.FieldTypeKindEnum:
-			ft.Name = "string"
+			ft.Name = strings.Title(f.Type.Name)
 		case graphql.FieldTypeKindObject:
 			ft.Name = f.Type.Name
 			ft.IsPointer = true
@@ -83,6 +85,8 @@ func newStructTemplateModel(t graphql.Type) structTemplateModel {
 func navigateOfType(o *graphql.OfType, stft *structTemplateFieldType) {
 	switch o.Kind {
 	case graphql.FieldTypeKindNonNull:
+	case graphql.FieldTypeKindInputObject:
+		stft.Name = strings.Title(o.Name)
 	case graphql.FieldTypeKindInterface:
 		stft.Name = strings.Title(o.Name)
 	case graphql.FieldTypeKindUnion:
@@ -92,7 +96,9 @@ func navigateOfType(o *graphql.OfType, stft *structTemplateFieldType) {
 	case graphql.FieldTypeKindList:
 		stft.IsList = true
 	case graphql.FieldTypeKindObject:
-		stft.IsPointer = true
+		if !stft.IsList {
+			stft.IsPointer = true
+		}
 		fallthrough
 	case graphql.FieldTypeKindScalar:
 		stft.Name = mapToGoScalar(o.Name)
