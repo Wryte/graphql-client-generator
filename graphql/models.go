@@ -89,15 +89,7 @@ func (f *Field) TypeName() string {
 
 // IsNonNull check if field is non null
 func (f *Field) IsNonNull() bool {
-	if f.Type.Kind == FieldTypeKindNonNull {
-		return true
-	}
-
-	if f.Type.OfType == nil {
-		return false
-	}
-
-	return f.Type.OfType.IsNonNull()
+	return f.Type.Kind == FieldTypeKindNonNull
 }
 
 // IsInterface check if field is interface
@@ -229,15 +221,7 @@ func (a *Arg) TypeName() string {
 
 // IsNonNull check if field is non null
 func (a *Arg) IsNonNull() bool {
-	if a.Type.Kind == FieldTypeKindNonNull {
-		return true
-	}
-
-	if a.Type.OfType == nil {
-		return false
-	}
-
-	return a.Type.OfType.IsNonNull()
+	return a.Type.Kind == FieldTypeKindNonNull
 }
 
 // IsInterface check if field is interface
