@@ -9,26 +9,26 @@ import (
 )
 
 type enumTemplateModel struct {
-	TitleName   string
+	GoName      string
 	Description template.HTML
 	Values      []enumTemplateValue
 }
 
 type enumTemplateValue struct {
-	TitleName   string
+	GoName      string
 	Description template.HTML
 	Value       string
 }
 
 func newEnumTemplateModel(t graphql.Type) enumTemplateModel {
 	et := enumTemplateModel{
-		TitleName:   strings.Title(t.Name),
+		GoName:      makeExportedName(t.Name),
 		Description: template.HTML(addComments(t.Description, "")),
 	}
 
 	for _, ev := range t.EnumValues {
 		et.Values = append(et.Values, enumTemplateValue{
-			TitleName:   shoutingSnakeToPascal(ev.Name),
+			GoName:      makeExportedName(shoutingSnakeToPascal(ev.Name)),
 			Description: template.HTML(addComments(ev.Description, "\t")),
 			Value:       ev.Name,
 		})

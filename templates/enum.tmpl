@@ -1,8 +1,8 @@
 
-// {{.TitleName}} {{.Description}}
-type {{.TitleName}} string
+// {{.GoName}} {{.Description}}
+type {{.GoName}} string
 
 const ({{range .Values}}
-  // {{$.TitleName}}{{.TitleName}} {{.Description}}
-  {{$.TitleName}}{{.TitleName}} {{$.TitleName}} = "{{.Value}}"{{end}}
+  // {{$.GoName}}{{.GoName}} {{.Description}}
+  {{$.GoName}}{{.GoName}} {{$.GoName}} = "{{.Value}}"{{end}}
 )

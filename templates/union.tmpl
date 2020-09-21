@@ -1,15 +1,28 @@
 
-// {{.TitleName}} {{.Description}}
-type {{.TitleName}} struct {{"{"}}{{range .PossibleTypes}}
-	// {{.TitleName}} A possible type of {{.Name}}
-	{{.TitleName}} *{{.TitleName}} `json:"{{.Name}}"`{{end}}
+// {{.GoName}} {{.Description}}
+type {{.GoName}} struct {{"{"}}{{range .PossibleTypes}}
+	// {{.GoName}} A possible type of {{.Name}}
+	{{.GoName}} *{{.GoName}} `json:"{{.Name}}"`{{end}}
 }
 
 // UnmarshalJSON customer unmarshal function for {{.Name}} union type
-func ({{.FirstChar}} *{{.TitleName}}) UnmarshalJSON(data []byte) error {{"{"}}{{range .PossibleTypes}}
-	if err := json.Unmarshal(data, &{{$.FirstChar}}.{{.TitleName}}); err != nil {
+func ({{.FirstChar}} *{{.GoName}}) UnmarshalJSON(data []byte) error {{"{"}}{{range .PossibleTypes}}
+	if err := json.Unmarshal(data, &{{$.FirstChar}}.{{.GoName}}); err != nil {
 		return err
 	}
 	{{end}}
 	return nil
+}
+
+// MarshalJSON customer marshal function for {{.Name}} union type
+func ({{.FirstChar}} *{{.GoName}}) MarshalJSON() ([]byte, error) {{"{"}}{{range .PossibleTypes}}
+	if {{$.FirstChar}}.{{.GoName}} != nil {
+		bytes, err := json.Marshal({{$.FirstChar}}.{{.GoName}})
+		if err != nil {
+			return nil, err
+		}
+		return bytes, nil
+	}
+	{{end}}
+	return nil, errors.New("could not marshal struct {{.GoName}}: no value assigned")
 }

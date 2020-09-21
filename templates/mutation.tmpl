@@ -1,0 +1,29 @@
+
+// {{.TitleName}} {{.Description}}
+func (c *Client) {{.TitleName}} ({{range .Args}}
+	// {{.Description}}
+	{{.GoParamDef}},{{end}}
+) ({{.ReturnType}}, error) {
+	var (
+		v {{.ReturnType}}
+		vars map[string]interface{}
+	)
+	{{range .Args}}
+	vars["{{.Name}}"] = {{.Name}}{{end}}
+
+	err := c.Query(
+		`mutation {{.TitleName}}({{range .Args}}
+			{{.MutationParamDef}}{{end}}
+		) {
+			{{.TitleName}} ({{range .Args}}
+				{{.MutationArgumentDef}}{{end}}
+			) {
+				
+			}
+		}`,
+		vars,
+		&v,
+	)
+
+	return v, err
+}

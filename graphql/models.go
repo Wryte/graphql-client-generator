@@ -71,6 +71,124 @@ type Field struct {
 	Type              FieldType `json:"type"`
 	IsDeprecated      bool      `json:"isDeprecated"`
 	DeprecationReason string    `json:"deprecationReason"`
+	Args              []Arg     `json:"args"`
+}
+
+// TypeName name of the field's type
+func (f *Field) TypeName() string {
+	if f.Type.Name != "" {
+		return f.Type.Name
+	}
+
+	if f.Type.OfType == nil {
+		return ""
+	}
+
+	return f.Type.OfType.TypeName()
+}
+
+// IsNonNull check if field is non null
+func (f *Field) IsNonNull() bool {
+	if f.Type.Kind == FieldTypeKindNonNull {
+		return true
+	}
+
+	if f.Type.OfType == nil {
+		return false
+	}
+
+	return f.Type.OfType.IsNonNull()
+}
+
+// IsInterface check if field is interface
+func (f *Field) IsInterface() bool {
+	if f.Type.Kind == FieldTypeKindInterface {
+		return true
+	}
+
+	if f.Type.OfType == nil {
+		return false
+	}
+
+	return f.Type.OfType.IsInterface()
+}
+
+// IsEnum check if field is enum
+func (f *Field) IsEnum() bool {
+	if f.Type.Kind == FieldTypeKindEnum {
+		return true
+	}
+
+	if f.Type.OfType == nil {
+		return false
+	}
+
+	return f.Type.OfType.IsEnum()
+}
+
+// IsObject check if field is object
+func (f *Field) IsObject() bool {
+	if f.Type.Kind == FieldTypeKindObject {
+		return true
+	}
+
+	if f.Type.OfType == nil {
+		return false
+	}
+
+	return f.Type.OfType.IsObject()
+}
+
+// IsScalar check if field is scalar
+func (f *Field) IsScalar() bool {
+	if f.Type.Kind == FieldTypeKindScalar {
+		return true
+	}
+
+	if f.Type.OfType == nil {
+		return false
+	}
+
+	return f.Type.OfType.IsScalar()
+}
+
+// IsList check if field is list
+func (f *Field) IsList() bool {
+	if f.Type.Kind == FieldTypeKindList {
+		return true
+	}
+
+	if f.Type.OfType == nil {
+		return false
+	}
+
+	return f.Type.OfType.IsList()
+}
+
+// IsUnion check if field is union
+func (f *Field) IsUnion() bool {
+	if f.Type.Kind == FieldTypeKindUnion {
+		return true
+	}
+
+	if f.Type.OfType == nil {
+		return false
+	}
+
+	return f.Type.OfType.IsUnion()
+}
+
+// IsInputObject check if field is input object
+func (f *Field) IsInputObject() bool {
+	if f.Type.Kind == FieldTypeKindInputObject {
+		return true
+	}
+
+	if f.Type.OfType == nil {
+		return false
+	}
+
+	return f.Type.OfType.IsInputObject()
 }
 
 // PossibleType a possible type for a GrahpQL union
@@ -86,6 +204,131 @@ type EnumValue struct {
 	Description       string `json:"description"`
 	IsDeprecated      bool   `json:"isDeprecated"`
 	DeprecationReason string `json:"deprecationReason"`
+}
+
+// Arg a mutation argument
+type Arg struct {
+	Name         string    `json:"name"`
+	Description  string    `json:"description"`
+	Type         FieldType `json:"type"`
+	DefaultValue string
+}
+
+// TypeName name of the field's type
+func (a *Arg) TypeName() string {
+	if a.Type.Name != "" {
+		return a.Type.Name
+	}
+
+	if a.Type.OfType == nil {
+		return ""
+	}
+
+	return a.Type.OfType.TypeName()
+}
+
+// IsNonNull check if field is non null
+func (a *Arg) IsNonNull() bool {
+	if a.Type.Kind == FieldTypeKindNonNull {
+		return true
+	}
+
+	if a.Type.OfType == nil {
+		return false
+	}
+
+	return a.Type.OfType.IsNonNull()
+}
+
+// IsInterface check if field is interface
+func (a *Arg) IsInterface() bool {
+	if a.Type.Kind == FieldTypeKindInterface {
+		return true
+	}
+
+	if a.Type.OfType == nil {
+		return false
+	}
+
+	return a.Type.OfType.IsInterface()
+}
+
+// IsEnum check if field is enum
+func (a *Arg) IsEnum() bool {
+	if a.Type.Kind == FieldTypeKindEnum {
+		return true
+	}
+
+	if a.Type.OfType == nil {
+		return false
+	}
+
+	return a.Type.OfType.IsEnum()
+}
+
+// IsObject check if field is object
+func (a *Arg) IsObject() bool {
+	if a.Type.Kind == FieldTypeKindObject {
+		return true
+	}
+
+	if a.Type.OfType == nil {
+		return false
+	}
+
+	return a.Type.OfType.IsObject()
+}
+
+// IsScalar check if field is scalar
+func (a *Arg) IsScalar() bool {
+	if a.Type.Kind == FieldTypeKindScalar {
+		return true
+	}
+
+	if a.Type.OfType == nil {
+		return false
+	}
+
+	return a.Type.OfType.IsScalar()
+}
+
+// IsList check if field is list
+func (a *Arg) IsList() bool {
+	if a.Type.Kind == FieldTypeKindList {
+		return true
+	}
+
+	if a.Type.OfType == nil {
+		return false
+	}
+
+	return a.Type.OfType.IsList()
+}
+
+// IsUnion check if field is union
+func (a *Arg) IsUnion() bool {
+	if a.Type.Kind == FieldTypeKindUnion {
+		return true
+	}
+
+	if a.Type.OfType == nil {
+		return false
+	}
+
+	return a.Type.OfType.IsUnion()
+}
+
+// IsInputObject check if field is input object
+func (a *Arg) IsInputObject() bool {
+	if a.Type.Kind == FieldTypeKindInputObject {
+		return true
+	}
+
+	if a.Type.OfType == nil {
+		return false
+	}
+
+	return a.Type.OfType.IsInputObject()
 }
 
 // FieldType a GraphQL field's type
@@ -122,4 +365,121 @@ type OfType struct {
 	Kind   FieldTypeKind `json:"kind"`
 	Name   string        `json:"name"`
 	OfType *OfType       `json:"ofType"`
+}
+
+// TypeName name of the type
+func (o *OfType) TypeName() string {
+	if o.Name != "" {
+		return o.Name
+	}
+
+	if o.OfType == nil {
+		return ""
+	}
+
+	return o.OfType.TypeName()
+}
+
+// IsNonNull navigate of types for non null
+func (o *OfType) IsNonNull() bool {
+	if o.Kind == FieldTypeKindNonNull {
+		return true
+	}
+
+	if o.OfType == nil {
+		return false
+	}
+
+	return o.OfType.IsNonNull()
+}
+
+// IsInterface navigate of types for interface
+func (o *OfType) IsInterface() bool {
+	if o.Kind == FieldTypeKindInterface {
+		return true
+	}
+
+	if o.OfType == nil {
+		return false
+	}
+
+	return o.OfType.IsInterface()
+}
+
+// IsEnum navigate of types for Enum
+func (o *OfType) IsEnum() bool {
+	if o.Kind == FieldTypeKindEnum {
+		return true
+	}
+
+	if o.OfType == nil {
+		return false
+	}
+
+	return o.OfType.IsEnum()
+}
+
+// IsObject navigate of types for object
+func (o *OfType) IsObject() bool {
+	if o.Kind == FieldTypeKindObject {
+		return true
+	}
+
+	if o.OfType == nil {
+		return false
+	}
+
+	return o.OfType.IsObject()
+}
+
+// IsScalar navigate of types for scalar
+func (o *OfType) IsScalar() bool {
+	if o.Kind == FieldTypeKindScalar {
+		return true
+	}
+
+	if o.OfType == nil {
+		return false
+	}
+
+	return o.OfType.IsScalar()
+}
+
+// IsList navigate of types for list
+func (o *OfType) IsList() bool {
+	if o.Kind == FieldTypeKindList {
+		return true
+	}
+
+	if o.OfType == nil {
+		return false
+	}
+
+	return o.OfType.IsList()
+}
+
+// IsUnion navigate of types for union
+func (o *OfType) IsUnion() bool {
+	if o.Kind == FieldTypeKindUnion {
+		return true
+	}
+
+	if o.OfType == nil {
+		return false
+	}
+
+	return o.OfType.IsUnion()
+}
+
+// IsInputObject navigate of types for input object
+func (o *OfType) IsInputObject() bool {
+	if o.Kind == FieldTypeKindInputObject {
+		return true
+	}
+
+	if o.OfType == nil {
+		return false
+	}
+
+	return o.OfType.IsInputObject()
 }
