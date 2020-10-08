@@ -2,5 +2,5 @@
 // {{.GoName}} {{.Description}}
 type {{.GoName}} struct {{"{"}}{{range .Fields}}
 	// {{.GoName}} {{.Description}}
-	{{.GoName}} {{.GoTypeDef}} `json:"{{.Name}}"{{.GoGraphQLTag}}`{{end}}
+	{{.GoName}} {{.GoTypeDef}} `json:"{{.GoJSONTag}}"{{.GoGraphQLTag}}`{{end}}
 }

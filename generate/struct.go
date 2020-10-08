@@ -20,6 +20,7 @@ type structTemplateField struct {
 	Description  template.HTML
 	GoTypeDef    string
 	GoGraphQLTag template.HTML
+	GoJSONTag    template.HTML
 }
 
 func newStructTemplateModel(t graphql.Type) structTemplateModel {
@@ -30,16 +31,26 @@ func newStructTemplateModel(t graphql.Type) structTemplateModel {
 	}
 
 	for _, f := range t.Fields {
-		var prefix string
-		var graphQLTag string
+		var (
+			prefix     string
+			graphQLTag string
+			jsonTag    = f.Name
+		)
+
 		if !f.IsNonNull() || f.IsObject() {
 			prefix = "*"
 		}
+
 		if f.IsList() {
 			prefix = "[]"
 		}
-		if f.IsNonNull() && f.IsInputObject() {
-			graphQLTag = ` gql:"required"`
+
+		if t.IsInputObject() {
+			if f.IsNonNull() {
+				graphQLTag = ` gql:"required"`
+			} else {
+				jsonTag = fmt.Sprintf("%s,omitempty", jsonTag)
+			}
 		}
 
 		fieldType := mapToGoScalar(f.TypeName())
@@ -50,7 +61,7 @@ func newStructTemplateModel(t graphql.Type) structTemplateModel {
 		stm.Fields = append(
 			stm.Fields,
 			structTemplateField{
-				Name:         f.Name,
+				GoJSONTag:    template.HTML(jsonTag),
 				GoName:       makeExportedName(f.Name),
 				Description:  template.HTML(addComments(f.Description, "\t")),
 				GoTypeDef:    fmt.Sprintf("%s%s", prefix, fieldType),

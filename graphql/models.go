@@ -33,19 +33,6 @@ type Type struct {
 	InputFields   []Field        `json:"inputFields"`
 }
 
-// NonNullFields retrieve non null fields
-func (t *Type) NonNullFields() []Field {
-	var fs []Field
-
-	for _, f := range t.Fields {
-		if f.Type.Kind == FieldTypeKindNonNull {
-			fs = append(fs, f)
-		}
-	}
-
-	return fs
-}
-
 // TypeKind a type's kind
 type TypeKind string
 
@@ -63,6 +50,11 @@ const (
 	// TypeKindScalar an scalar type kind
 	TypeKindScalar TypeKind = "SCALAR"
 )
+
+// IsInputObject check if the type is an input object
+func (t *Type) IsInputObject() bool {
+	return t.Kind == TypeKindInputObject
+}
 
 // Field a field on a GraphQL type
 type Field struct {
