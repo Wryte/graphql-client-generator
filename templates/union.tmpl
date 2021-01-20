@@ -5,7 +5,7 @@ type {{.GoName}} struct {{"{"}}{{range .PossibleTypes}}
 	{{.GoName}} *{{.GoName}} `json:"{{.Name}}"`{{end}}
 }
 
-// UnmarshalJSON customer unmarshal function for {{.Name}} union type
+// UnmarshalJSON custom unmarshal function for {{.Name}} union type
 func ({{.FirstChar}} *{{.GoName}}) UnmarshalJSON(data []byte) error {{"{"}}{{range .PossibleTypes}}
 	if err := json.Unmarshal(data, &{{$.FirstChar}}.{{.GoName}}); err != nil {
 		return err
@@ -14,8 +14,8 @@ func ({{.FirstChar}} *{{.GoName}}) UnmarshalJSON(data []byte) error {{"{"}}{{ran
 	return nil
 }
 
-// MarshalJSON customer marshal function for {{.Name}} union type
-func ({{.FirstChar}} *{{.GoName}}) MarshalJSON() ([]byte, error) {{"{"}}{{range .PossibleTypes}}
+// MarshalJSON custom marshal function for {{.Name}} union type
+func ({{.FirstChar}} {{.GoName}}) MarshalJSON() ([]byte, error) {{"{"}}{{range .PossibleTypes}}
 	if {{$.FirstChar}}.{{.GoName}} != nil {
 		bytes, err := json.Marshal({{$.FirstChar}}.{{.GoName}})
 		if err != nil {
